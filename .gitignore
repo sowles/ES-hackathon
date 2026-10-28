@@ -4,3 +4,6 @@
 *.pem
 secrets/
 .edit-key
+
+__pycache__/
+*.pyc
