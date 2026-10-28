@@ -1,0 +1,25 @@
+{
+  "mcpServers": {
+    "viewer": {
+      "url": "https://view.esconsulting.io/mcp",
+      "headers": {
+        "Authorization": "Bearer MCP_VIEW"
+      }
+    },
+    "bio": {
+      "url": "https://bio.esconsulting.io/mcp",
+      "headers": {
+        "Authorization": "Bearer HelenMCP"
+      }
+    },
+    "eshack": {
+      "url": "https://eshack.atscalehosted.com/mcp",
+      "auth": {
+        "scopes": ["openid", "email", "profile"]
+      }
+    },
+    "primer": {
+      "url": "https://primer.esconsulting.io/mcp"
+    }
+  }
+}

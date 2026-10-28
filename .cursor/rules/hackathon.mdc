@@ -1,0 +1,30 @@
+---
+description: ES Consulting Grok Bot Hackathon 2026 connectors, missions, and sharing rules
+alwaysApply: true
+---
+
+# ES Hackathon 2026
+
+Hub: https://hack.esconsulting.io/ · Agent notes: https://hack.esconsulting.io/llms.txt
+Slack invite: https://join.slack.com/t/esconsultingh-bkk4135/shared_invite/zt-4exed8sow-unKQTmfKjHwSpQtnJ~d9AA
+Share to https://view.esconsulting.io/view via the `viewer` MCP. Tokens on the hub are public; never save private secrets there.
+
+## MCP (project `.cursor/mcp.json`)
+
+- `viewer` — publish pages/dashboards/videos. Read `skill://artifact-skill` before any publish.
+- `bio` — Mission 1: Helen Williamson email, calendar, meeting summaries.
+- `eshack` — Mission 2: AtScale semantic layer. Before any query, follow https://eshack.atscalehosted.com/grok-readme (list_models → explore_columns → focus_columns → run_query). Model: `Biopharma Portfolio Operations (Phase 3)`. Data as of 31 Oct 2026. Never invent numbers.
+- `primer` — Mission 3: Primer3 migration tools and referee. No auth.
+
+If AtScale asks to sign in in Cursor: username `es-hackathon`, password `Hackathon2026`.
+
+## Missions
+
+1. Daily two-slide CEO briefing (priorities + performance) from Helen's inbox/calendar.
+2. +20% patients / new trial site — how the supply chain responds.
+3. Wrap Primer3 as an agent service; referee requires identical results.
+4. Wildcard: mix any of the above.
+
+## Viewer publish
+
+Read artifact-skill first. No JavaScript in HTML (inline CSS only). Dashboards use A2MDX. MP4 videos POST to https://view.esconsulting.io/api/videos, not save_artifact.
