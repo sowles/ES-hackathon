@@ -15,6 +15,12 @@ Project MCP config is in [`.cursor/mcp.json`](.cursor/mcp.json). After opening t
 
 If AtScale shows a sign-in card, use the username and password above.
 
+## Product and data (read these)
+
+- [plan.md](plan.md) — `/chief` and `/brief` (George). Published OKRs live here.
+- [docs/data-ingestion.md](docs/data-ingestion.md) — how agents pull Helen’s email/calendar, where snapshots live, and how the morning job respects Brief reviews.
+- [docs/helen-okr-pack-h2-2026.md](docs/helen-okr-pack-h2-2026.md) — inferred Helen OKRs from her files (Andy).
+
 ## Links
 
 - Hub: https://hack.esconsulting.io/

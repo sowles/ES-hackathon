@@ -98,3 +98,7 @@ For the CEO and the CPO. They type `/brief` in Grok, and Grok opens the website.
 ## Out of scope
 
 Live warehouse numbers inside the brief. Any engineer outside this batch of five.
+
+## CEO context pipeline
+
+Helen’s mailbox and calendar are ingested for this loop. Agents: read [docs/data-ingestion.md](docs/data-ingestion.md). Snapshots will live under `data/`. The morning job writes [briefs/pending.md](briefs/pending.md) and **must** start from the last review in [briefs/REVIEW.md](briefs/REVIEW.md). It never Accepts. `/chief` still reads **Current OKRs** above until a Brief Accept republishes them.
