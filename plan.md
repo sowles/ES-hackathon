@@ -26,7 +26,7 @@ A PRD can be sound for one team and still move the company off its OKRs. The CEO
 
 ## What `/chief` does
 
-Input is one PRD.
+Input is one PRD. In Grok the engineer types `/chief` and then the PRD. The call is appended to `beef/calls.jsonl`. `beef/goals.md` is not edited.
 
 1. Name the change the PRD asks for, in one sentence.
 2. Find the engineers already on nearby work, and read their latest calls.
@@ -120,7 +120,7 @@ Top to bottom:
 1. Title, open state, and a one-line count of `/chief` calls.
 2. Decisions needed. At most three items blocked on the CEO or the CPO, each with the one-click answers it needs. Example: "Runway falls to 11 months under OKR 3's floor of 12. Accept the miss, or ask Sam for a burn offset?"
 3. Effort by OKR (say versus do). One bar per OKR showing how many engineers' current work sits on it, plus a bar for work on no OKR. Example from the seed batch: OKR 1 has 3, OKR 2 has 1, OKR 3 has 1, beside or none has 1 (Nate). The gap between what leadership says matters and where engineering time goes is visible in one glance.
-4. What the engineers are doing, grouped into themes, including work that does not fit the plan. Work beside an OKR or on none is labeled a branch, with two buttons: promote to plan or pause.
+4. What the engineers are doing, grouped into themes, including work that does not fit the goal. Work beside an OKR or on none is labeled a branch, with one button: Promote to beef. That writes the work into the goal of Chief Beef.
 5. Merge conflicts. Pairs of engineers building overlapping or contradictory work, found by comparing their current work and last calls. Example: Jordan and Alex both forecasting months of supply for the new site.
 6. Priorities and Performance as a side-by-side diff. Removals on the left, additions on the right. Unchanged lines on both sides.
 7. Each changed line cites the engineers behind it. Clicking any line opens blame: the PRD, the `/chief` calls, and the sentiment count that produced the change, in order.

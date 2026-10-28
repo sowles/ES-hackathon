@@ -15,12 +15,13 @@ Data pipelines keep **Chief Beef** current. This repo’s pipeline writes Helen�
 | `beef/goals.md` | **The goal.** Pipelines never write this. Accept does. |
 | `beef/CHIEF_BEEF.md` | Goal + coupled Helen context (or unclassified) |
 | `beef/inflow.jsonl` | One Helen item per line: person, time, OKR, relation |
+| `beef/calls.jsonl` | One `/chief` call per line. Created on the first call. |
 | `briefs/pending.md` | Auto-compiled Chief Brief (markdown). No person writes it. |
 | `public/brief.json` | Same compile, for the Chief Brief app. |
 | `briefs/REVIEW.md` | Append-only Accept / Request changes / Decline log. **Morning agent starts here.** |
 | `briefs/declined.md` | Lines leadership declined; do not re-propose without new evidence |
 | `briefs/accepted/` | Archived briefs after Accept |
-| `plan.md` Current OKRs | Seed copy of the goal. `/chief` reads the Beef goal after Accept; until then this seed. |
+| `plan.md` Current OKRs | Seed that was copied into `beef/goals.md`. `/chief` reads `beef/goals.md`. |
 
 ```
 python3 scripts/run_morning.py
@@ -84,9 +85,9 @@ Overnight staffer. Never Accepts.
 
 ## `/chief` and `/brief`
 
-- `/chief` takes a PRD, scores it against **published** OKRs in `plan.md`, and stores the call. It does not mutate the plan.
-- `/brief` shows engineer calls plus the pending Priorities \| Performance diff. Accept republishes `plan.md` and appends `briefs/REVIEW.md`.
-- Until Accept, `/chief` still uses the old OKRs.
+- An engineer types `/chief` and then a PRD. Grok follows [`.cursor/skills/chief/SKILL.md`](../.cursor/skills/chief/SKILL.md). Grok places the PRD on the goal. `python3 scripts/log_chief_call.py` checks that each quoted line is in `beef/goals.md` and appends `beef/calls.jsonl`. It does not edit the goal.
+- `/brief` is compiled from Beef. Accept writes `beef/goals.md` and appends `briefs/REVIEW.md`. The next `/chief` reads that goal.
+- Until Accept, `/chief` still uses the goal already in `beef/goals.md`.
 
 George’s `plan.md` seed OKRs are still the Mission 2 lines (trial site, months of supply, runway). The first accepted Brief on the CoS route should replace that seed with Helen’s pack so `/chief` scores the right company.
 

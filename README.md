@@ -18,6 +18,7 @@ If AtScale shows a sign-in card, use the username and password above.
 ## Product and data (read these)
 
 - [plan.md](plan.md) — Chief, **Chief Beef**, and Chief Brief. Published OKRs live here.
+- `/chief` then a PRD — Grok command in [`.cursor/commands/chief.md`](.cursor/commands/chief.md). Logs the call. Does not edit the goal.
 - [beef/CHIEF_BEEF.md](beef/CHIEF_BEEF.md) — context + goal. Pipelines update context; Accept updates `beef/goals.md`. Brief compiles from Beef. App: `yarn dev` reads `public/brief.json`.
 - [docs/data-ingestion.md](docs/data-ingestion.md) — Helen pull, paging, Beef coupling.
 - [docs/helen-okr-pack-h2-2026.md](docs/helen-okr-pack-h2-2026.md) — inferred Helen OKRs from her files (Andy).
