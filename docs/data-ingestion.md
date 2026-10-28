@@ -18,7 +18,14 @@ This pipeline does **not** replace `/chief`. It feeds evidence and a **pending B
 | `briefs/accepted/` | Archived briefs after Accept |
 | `plan.md` Current OKRs | Published plan. `/chief` reads this, not the pending brief |
 
-If `data/` is empty, the snapshot has not been run yet. Use the bio MCP directly with the paging rules below, or run `scripts/ingest_bio.py` once it lands.
+Refresh snapshots:
+
+```
+python3 scripts/ingest_bio.py
+python3 scripts/extract_signals.py
+```
+
+These two scripts are the ingestion contract. They do not edit `plan.md` or `briefs/pending.md`.
 
 ## Source: bio MCP (no Slack)
 

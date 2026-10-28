@@ -1,0 +1,12 @@
+{
+  "source": "https://bio.esconsulting.io/mcp",
+  "pulled_at": "2026-10-28T22:04:34Z",
+  "window": {
+    "start": "2026-06-01",
+    "end": "2026-10-31"
+  },
+  "counts": {
+    "events": 576,
+    "emails": 769
+  }
+}

@@ -9,4 +9,9 @@ Snapshots from the bio MCP. Agents: start at [docs/data-ingestion.md](../docs/da
 | `raw/emails.jsonl` | Inbox + sent |
 | `derived/signals.md` | Ranked decisions `/chief` and `/brief` should cite |
 
-Empty until ingest has run.
+Refresh:
+
+```
+python3 scripts/ingest_bio.py
+python3 scripts/extract_signals.py
+```
