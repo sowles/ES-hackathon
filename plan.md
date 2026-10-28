@@ -1,10 +1,24 @@
-# Chief and Chief Brief
+# Chief, Chief Beef, and Chief Brief
 
-Two parts. Engineers use Chief. The CEO and the CPO use Chief Brief.
+Engineers use Chief. The brief makers use Chief Beef. The CEO and the CPO use Chief Brief.
 
 **Chief.** An engineer types `/chief` in Grok, then a PRD. Chief reads that PRD and answers that engineer: what other engineers are already building, and whether the PRD sits on the OKRs. Sentiment is the recent `/chief` calls, counted for and against.
 
-**Chief Brief.** The CEO and the CPO type `/brief` in Grok. That opens the Chief Brief website. The page gathers the `/chief` calls into one view of what the engineers are doing, and whether that work is still on the OKRs. It looks like a pull request. Accepting it updates the plan. The next `/chief` call uses that plan.
+**Chief Beef.** The company context plus the goal. This is what the brief makers work from. The context is a constant inflow: Slack chats, git merges, Helen's mail and calendar, and the `/chief` calls. The goal is the OKRs, each with a time horizon. The makers keep those two coupled.
+
+**Chief Brief.** The CEO and the CPO type `/brief` in Grok. That opens the Chief Brief website. The page gathers the `/chief` calls into one view of what the engineers are doing, and whether that work is still on the OKRs. It looks like a pull request. Accepting it updates the plan. The next `/chief` call uses that plan. The brief makers build it from Chief Beef.
+
+## The metaphor, all the way down
+
+Chief treats the company plan as a repository and engineering work as commits against it. Every Git idea the brief uses means one thing a CEO can act on:
+
+| Git idea | In Chief Brief | The question it answers |
+| --- | --- | --- |
+| diff | Priorities and Performance, removals left, additions right | What changed in the plan? |
+| blame | Click any OKR line to see the calls and engineers that moved it | Why did this line change? |
+| merge conflict | Two engineers building overlapping or contradictory work | Who is about to duplicate or collide? |
+| branch | Work that sits beside an OKR or on none | What is being built that nobody approved? |
+| history | Every accepted version of the plan, with who accepted it | How many times has this moved? |
 
 ## Problem
 
@@ -16,15 +30,16 @@ Input is one PRD.
 
 1. Name the change the PRD asks for, in one sentence.
 2. Find the engineers already on nearby work, and read their latest calls.
-3. Place the PRD on an OKR: on it, beside it, or in conflict with it.
+3. Place the PRD on an OKR: on it, beside it, in conflict with it, or unclassified when Chief cannot match it to any OKR line with confidence. Chief never forces a weak match.
 
 The reply is short:
 
-- Verdict: on the OKR, beside it, or in conflict.
+- Verdict: on the OKR, beside it, in conflict, or unclassified.
 - The OKR line it touches.
 - The engineers on that work, and what each one is building.
 - Sentiment: how many calls agree, and how many do not. One call is not enough to move an OKR.
 - The plan line that would change if leadership accepted it.
+- Plan changed since your last call. If the CEO and the CPO accepted a Brief after this engineer's previous `/chief`, the reply opens with the lines that changed and who accepted them. Alignment runs both directions: leadership sees engineering, and engineers see leadership's decisions.
 
 That reply stays with the engineer. It does not change the plan. The CEO and the CPO change the plan from Chief Brief. Until they accept, the next `/chief` still uses the old OKRs.
 
@@ -54,7 +69,7 @@ Lab platform. Wrapping Primer3 so an agent can design primers without a person a
 
 <img src="public/avatars/jordan.jpg" alt="Jordan Hale" width="96" />
 
-Supply. Dose demand for the new trial site. On OKR 1, watching OKR 2. Last call: open the site in November. Supply covers the added patients through Q1. A second site this quarter does not.
+Supply. Dose demand for the new trial site. On OKR 1, watching OKR 2. Last call: open the site in November. Supply covers the added patients through Q1. A second site this quarter does not. Jordan is also building a months-of-supply forecast for the new site.
 
 ### Owen Briggs
 
@@ -72,7 +87,7 @@ Finance systems. Burn and runway. On OKR 3. Last call: runway is 14 months at th
 
 <img src="public/avatars/alex.jpg" alt="Alex Ruiz" width="96" />
 
-Cold chain. Months of supply at the treatment sites. On OKR 2. Last call: hold a new site if months of supply would fall under 3. November still clears that line.
+Cold chain. Months of supply at the treatment sites. On OKR 2. Last call: hold a new site if months of supply would fall under 3. November still clears that line. Alex's months-of-supply model already covers the new site, so Jordan's forecast duplicates it.
 
 ## Worked example
 
@@ -84,17 +99,49 @@ Chief would answer:
 - Engineers: Jordan and Owen on the site, Nate on Primer3, Sam on the runway number, Alex on supply.
 - Sentiment: 2 calls to open in November (Jordan, Alex says supply still clears). 1 call against a second site (Owen). 1 call that the runway miss is real (Sam). 1 call for Primer3 (Nate).
 - Plan edit, if the CEO and the CPO accept it on Chief Brief: replace "Hold the new site until months of supply stay above 3" with "Open the new site in November. Supply covers the added patients through Q1." Add "Let lab agents run Primer3." Replace "Runway is 14 months at the current burn" with "Runway is 11 months if the new site opens in November."
+- Overlap: Jordan and Alex are both forecasting months of supply for the new site.
+
+## Chief Beef
+
+Chief Beef is the company context plus the goal. The brief makers care about this. The CEO and the CPO do not read it. They read the Chief Brief the makers build from it.
+
+**The goal.** The OKRs, each with a time horizon. A line is a target and a window. From the current plan: the new site opens in November, the added patients run through Q1, months of supply stay at or above 3, runway stays at or above 12 months. Work inside the window can move the line. Work past the window, or with no window, does not.
+
+**The context.** A constant inflow. Slack chats, git merges, Helen's mail and calendar, and the `/chief` calls. Each item arrives with a person and a time. The makers keep the inflow coming. They do not turn it into a new strategy of their own.
+
+**The coupling.** A Slack thread or a merged change matters when it supports, fights, or sits beside a goal inside that goal's window. Chief Beef keeps the pair: what arrived, and the OKR line and window it touches. Inflow that matches no line stays unclassified. The makers use the same rule `/chief` uses, and never force a weak match.
 
 ## Chief Brief
 
-For the CEO and the CPO. They type `/brief` in Grok, and Grok opens the website. The website is a page, not a git pull request. It looks like one.
+For the CEO and the CPO. They type `/brief` in Grok, and Grok opens the website. The website is a page, not a git pull request. It looks like one. The brief makers build it from Chief Beef.
 
-- Title, open state, and a one-line count of `/chief` calls.
-- What the engineers are doing, grouped into themes, including work that does not fit the plan.
-- `Priorities` and `Performance` as a side-by-side diff. Removals on the left, additions on the right. Unchanged lines on both sides.
-- Each changed line cites the engineers behind it.
-- Accept, request changes, or decline. Accept republishes the plan. The next `/chief` in Grok uses that plan.
+Top to bottom:
+
+1. Title, open state, and a one-line count of `/chief` calls.
+2. Decisions needed. At most three items blocked on the CEO or the CPO, each with the one-click answers it needs. Example: "Runway falls to 11 months under OKR 3's floor of 12. Accept the miss, or ask Sam for a burn offset?"
+3. Effort by OKR (say versus do). One bar per OKR showing how many engineers' current work sits on it, plus a bar for work on no OKR. Example from the seed batch: OKR 1 has 3, OKR 2 has 1, OKR 3 has 1, beside or none has 1 (Nate). The gap between what leadership says matters and where engineering time goes is visible in one glance.
+4. What the engineers are doing, grouped into themes, including work that does not fit the plan. Work beside an OKR or on none is labeled a branch, with two buttons: promote to plan or pause.
+5. Merge conflicts. Pairs of engineers building overlapping or contradictory work, found by comparing their current work and last calls. Example: Jordan and Alex both forecasting months of supply for the new site.
+6. Priorities and Performance as a side-by-side diff. Removals on the left, additions on the right. Unchanged lines on both sides.
+7. Each changed line cites the engineers behind it. Clicking any line opens blame: the PRD, the `/chief` calls, and the sentiment count that produced the change, in order.
+8. Accept, request changes, or decline. Accept republishes the plan. The next `/chief` in Grok uses that plan.
+9. Request changes takes a comment. The comment goes to every engineer cited on that line, through Slack, and opens their next `/chief` reply.
+10. History. Every accepted version of the plan is kept with who accepted it and when, so the brief can show "this line has moved 3 times."
+
+## Demo (three minutes)
+
+One story, every step visible, the problem solved by the end.
+
+1. Open. The CEO types `/brief`. Decisions needed shows one item: OKR 3 is off track, runway 11 months against a floor of 12.
+2. Blame. The CEO clicks the OKR 3 line. Blame shows the PRD to open the site in November, Jordan's and Alex's calls for it, and Sam's call that the runway miss is real.
+3. Merge conflict. The brief shows Jordan and Alex both forecasting months of supply for the new site.
+4. Resolve with one comment. The CEO clicks Request changes on the site line: "Open in November. Sam, bring a burn offset that keeps runway at 12 or more. Alex owns the supply forecast; Jordan, drop the duplicate." The comment lands in Slack for Sam, Alex and Jordan.
+5. Close the loop. Jordan runs `/chief` on a new PRD. The reply opens with "Plan changed since your last call" and the CEO's decision.
 
 ## Out of scope
 
 Live warehouse numbers inside the brief. Any engineer outside this batch of five.
+
+## CEO context pipeline
+
+Chief Beef is where the inflow lands: Helen's mailbox and calendar, Slack chats, git merges, and the `/chief` calls, each kept with the person, the time, and the OKR window it touches. Agents: read `docs/data-ingestion.md`. Snapshots will live under `data/`. The morning job reads Chief Beef, writes `briefs/pending.md`, and must start from the last review in `briefs/REVIEW.md`. It never Accepts. `/chief` still reads Current OKRs above until a Brief Accept republishes them.
