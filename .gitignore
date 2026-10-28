@@ -4,3 +4,6 @@
 *.pem
 secrets/
 .edit-key
+
+node_modules
+dist
