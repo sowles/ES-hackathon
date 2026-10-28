@@ -2,7 +2,7 @@
 
 How we pull CEO context for `/chief` and `/brief`. Product contract is [plan.md](../plan.md). Helen-shaped OKRs (exercise) are [helen-okr-pack-h2-2026.md](helen-okr-pack-h2-2026.md).
 
-This pipeline does **not** replace `/chief`. It feeds evidence and a **pending Brief**. Only an Accept on Chief Brief republishes the plan.
+Data pipelines keep **Chief Beef** current. This repo’s pipeline writes Helen’s mail and calendar into Beef **context**. It never edits the **goal** (`beef/goals.md`). The compiler reads Beef and writes `briefs/pending.md`. Only Accept changes the goal. `/chief` reads that goal until Accept.
 
 ## Where to look
 
@@ -11,14 +11,20 @@ This pipeline does **not** replace `/chief`. It feeds evidence and a **pending B
 | `data/canon/background.md` | Company canon from `knowledge://continental-bio/background` |
 | `data/raw/events.jsonl` | Helen’s calendar, one event per line. Each row already has the meeting `summary` (Decisions / Action items / Follow-ups). |
 | `data/raw/emails.jsonl` | Mailbox snapshot (`inbox` + `sent`) |
-| `data/derived/signals.md` | Ranked open/locked decisions, 2026–27 commitments, 2027–29 themes, with evidence ids |
-| `briefs/pending.md` | Unreviewed Chief Brief (Priorities \| Performance diff) |
+| `data/derived/signals.md` | Ranked open/locked decisions, with evidence ids |
+| `beef/goals.md` | **The goal.** Pipelines never write this. Accept does. |
+| `beef/CHIEF_BEEF.md` | Goal + coupled Helen context (or unclassified) |
+| `beef/inflow.jsonl` | One Helen item per line: person, time, OKR, relation |
+| `briefs/pending.md` | Auto-compiled Chief Brief. No person writes it. |
 | `briefs/REVIEW.md` | Append-only Accept / Request changes / Decline log. **Morning agent starts here.** |
 | `briefs/declined.md` | Lines leadership declined; do not re-propose without new evidence |
 | `briefs/accepted/` | Archived briefs after Accept |
-| `plan.md` Current OKRs | Published plan. `/chief` reads this, not the pending brief |
+| `plan.md` Current OKRs | Seed copy of the goal. `/chief` reads the Beef goal after Accept; until then this seed. |
 
-If `data/` is empty, the snapshot has not been run yet. Use the bio MCP directly with the paging rules below, or run `scripts/ingest_bio.py` once it lands.
+```
+python3 scripts/run_morning.py
+python3 scripts/verify_ingest.py
+```
 
 ## Source: bio MCP (no Slack)
 
