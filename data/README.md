@@ -9,4 +9,4 @@ Snapshots from the bio MCP. Agents: start at [docs/data-ingestion.md](../docs/da
 | `raw/emails.jsonl` | Inbox + sent |
 | `derived/signals.md` | Ranked decisions `/chief` and `/brief` should cite |
 
-Refresh: `python3 scripts/run_morning.py` (also rebuilds Chief Beef and `briefs/pending.md`).
+Refresh: `python3 scripts/run_morning.py` (also rebuilds Chief Beef, `briefs/pending.md`, and `public/brief.json`).

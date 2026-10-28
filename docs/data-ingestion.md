@@ -2,7 +2,7 @@
 
 How we pull CEO context for `/chief` and `/brief`. Product contract is [plan.md](../plan.md). Helen-shaped OKRs (exercise) are [helen-okr-pack-h2-2026.md](helen-okr-pack-h2-2026.md).
 
-Data pipelines keep **Chief Beef** current. This repo’s pipeline writes Helen’s mail and calendar into Beef **context**. It never edits the **goal** (`beef/goals.md`). The compiler reads Beef and writes `briefs/pending.md`. Only Accept changes the goal. `/chief` reads that goal until Accept.
+Data pipelines keep **Chief Beef** current. This repo’s pipeline writes Helen’s mail and calendar into Beef **context**. It never edits the **goal** (`beef/goals.md`). The compiler reads Beef and writes `briefs/pending.md` plus `public/brief.json`. The Chief Brief app renders that JSON. Only Accept changes the goal. `/chief` reads that goal until Accept.
 
 ## Where to look
 
@@ -15,7 +15,8 @@ Data pipelines keep **Chief Beef** current. This repo’s pipeline writes Helen�
 | `beef/goals.md` | **The goal.** Pipelines never write this. Accept does. |
 | `beef/CHIEF_BEEF.md` | Goal + coupled Helen context (or unclassified) |
 | `beef/inflow.jsonl` | One Helen item per line: person, time, OKR, relation |
-| `briefs/pending.md` | Auto-compiled Chief Brief. No person writes it. |
+| `briefs/pending.md` | Auto-compiled Chief Brief (markdown). No person writes it. |
+| `public/brief.json` | Same compile, for the Chief Brief app. |
 | `briefs/REVIEW.md` | Append-only Accept / Request changes / Decline log. **Morning agent starts here.** |
 | `briefs/declined.md` | Lines leadership declined; do not re-propose without new evidence |
 | `briefs/accepted/` | Archived briefs after Accept |

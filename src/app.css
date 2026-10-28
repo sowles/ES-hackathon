@@ -72,7 +72,7 @@ body {
 
 .bar {
   display: grid;
-  grid-template-columns: 220px 1fr 20px;
+  grid-template-columns: minmax(160px, 280px) 1fr 48px;
   gap: 12px;
   align-items: center;
   margin-top: 8px;
@@ -104,11 +104,22 @@ body {
   margin-top: 10px;
 }
 
-.people img {
+.people img,
+.avatar {
   width: 40px;
   height: 40px;
   border-radius: 50%;
   object-fit: cover;
+}
+
+.avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  background: #1e3d32;
+  color: #7ee2a8;
+  font-weight: 600;
 }
 
 .people small {
