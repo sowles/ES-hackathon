@@ -1,12 +1,12 @@
 # Chief, Chief Beef, and Chief Brief
 
-Engineers use Chief. The brief makers use Chief Beef. The CEO and the CPO use Chief Brief.
+Engineers use Chief. Data pipelines keep Chief Beef current. The CEO and the CPO read Chief Brief, and the only thing they change is the goal inside Chief Beef.
 
 **Chief.** An engineer types `/chief` in Grok, then a PRD. Chief reads that PRD and answers that engineer: what other engineers are already building, and whether the PRD sits on the OKRs. Sentiment is the recent `/chief` calls, counted for and against.
 
-**Chief Beef.** The company context plus the goal. This is what the brief makers work from. The context is a constant inflow: Slack chats, git merges, Helen's mail and calendar, and the `/chief` calls. The goal is the OKRs, each with a time horizon. The makers keep those two coupled.
+**Chief Beef.** The company context plus the goal. Pipelines update it all the time. The context is the inflow: Slack chats, git merges, Helen's mail and calendar, and the `/chief` calls. The goal is the OKRs, each with a time horizon. The pipelines keep the context coupled to that goal.
 
-**Chief Brief.** The CEO and the CPO type `/brief` in Grok. That opens the Chief Brief website. The page gathers the `/chief` calls into one view of what the engineers are doing, and whether that work is still on the OKRs. It looks like a pull request. Accepting it updates the plan. The next `/chief` call uses that plan. The brief makers build it from Chief Beef.
+**Chief Brief.** Compiled automatically from Chief Beef. No person writes it. The CEO and the CPO type `/brief` in Grok, and that opens the latest compilation. The page shows what the engineers are doing, and whether that work is still on the OKRs. It looks like a pull request. Accepting it writes the proposed change into the goal of Chief Beef. The next brief compiles itself from that beef, and the next `/chief` call reads that goal.
 
 ## The metaphor, all the way down
 
@@ -41,7 +41,7 @@ The reply is short:
 - The plan line that would change if leadership accepted it.
 - Plan changed since your last call. If the CEO and the CPO accepted a Brief after this engineer's previous `/chief`, the reply opens with the lines that changed and who accepted them. Alignment runs both directions: leadership sees engineering, and engineers see leadership's decisions.
 
-That reply stays with the engineer. It does not change the plan. The CEO and the CPO change the plan from Chief Brief. Until they accept, the next `/chief` still uses the old OKRs.
+That reply stays with the engineer. It does not change the goal. The CEO and the CPO change the goal by accepting a brief. Until they accept, the next `/chief` still uses the old goal.
 
 ## Two outcomes
 
@@ -98,22 +98,22 @@ Chief would answer:
 - On OKR 1 for the site. Beside OKR 1 for Primer3. In conflict with OKR 3, because runway falls to 11 months.
 - Engineers: Jordan and Owen on the site, Nate on Primer3, Sam on the runway number, Alex on supply.
 - Sentiment: 2 calls to open in November (Jordan, Alex says supply still clears). 1 call against a second site (Owen). 1 call that the runway miss is real (Sam). 1 call for Primer3 (Nate).
-- Plan edit, if the CEO and the CPO accept it on Chief Brief: replace "Hold the new site until months of supply stay above 3" with "Open the new site in November. Supply covers the added patients through Q1." Add "Let lab agents run Primer3." Replace "Runway is 14 months at the current burn" with "Runway is 11 months if the new site opens in November."
+- Goal edit, if the CEO and the CPO accept it: replace "Hold the new site until months of supply stay above 3" with "Open the new site in November. Supply covers the added patients through Q1." Add "Let lab agents run Primer3." Replace "Runway is 14 months at the current burn" with "Runway is 11 months if the new site opens in November." That write lands on the goal of Chief Beef. The brief recompiles from there.
 - Overlap: Jordan and Alex are both forecasting months of supply for the new site.
 
 ## Chief Beef
 
-Chief Beef is the company context plus the goal. The brief makers care about this. The CEO and the CPO do not read it. They read the Chief Brief the makers build from it.
+Chief Beef is the company context plus the goal. Data pipelines update it all the time. No person maintains it. The CEO and the CPO read the brief compiled from it, and the only thing they alter is the goal.
 
-**The goal.** The OKRs, each with a time horizon. A line is a target and a window. From the current plan: the new site opens in November, the added patients run through Q1, months of supply stay at or above 3, runway stays at or above 12 months. Work inside the window can move the line. Work past the window, or with no window, does not.
+**The goal.** The OKRs, each with a time horizon. A line is a target and a window. From the current plan: the new site opens in November, the added patients run through Q1, months of supply stay at or above 3, runway stays at or above 12 months. Work inside the window can move the line. Work past the window, or with no window, does not. Accept on a brief is the only way this side changes.
 
-**The context.** A constant inflow. Slack chats, git merges, Helen's mail and calendar, and the `/chief` calls. Each item arrives with a person and a time. The makers keep the inflow coming. They do not turn it into a new strategy of their own.
+**The context.** A constant inflow from the pipelines. Slack chats, git merges, Helen's mail and calendar, and the `/chief` calls. Each item arrives with a person and a time. The pipelines keep writing it. Nobody edits a chat, a merge, or a call by hand.
 
-**The coupling.** A Slack thread or a merged change matters when it supports, fights, or sits beside a goal inside that goal's window. Chief Beef keeps the pair: what arrived, and the OKR line and window it touches. Inflow that matches no line stays unclassified. The makers use the same rule `/chief` uses, and never force a weak match.
+**The coupling.** A Slack thread or a merged change matters when it supports, fights, or sits beside a goal inside that goal's window. Chief Beef keeps the pair: what arrived, and the OKR line and window it touches. Inflow that matches no line stays unclassified. The same rule `/chief` uses. A weak match is never forced.
 
 ## Chief Brief
 
-For the CEO and the CPO. They type `/brief` in Grok, and Grok opens the website. The website is a page, not a git pull request. It looks like one. The brief makers build it from Chief Beef.
+Compiled automatically from Chief Beef whenever the beef changes. No person writes the page. The CEO and the CPO type `/brief` in Grok, and Grok opens the latest compilation. The website is a page, not a git pull request. It looks like one. Accept writes the proposed lines into the goal of Chief Beef and leaves the context alone. Request changes and Decline leave the goal as it is.
 
 Top to bottom:
 
@@ -124,7 +124,7 @@ Top to bottom:
 5. Merge conflicts. Pairs of engineers building overlapping or contradictory work, found by comparing their current work and last calls. Example: Jordan and Alex both forecasting months of supply for the new site.
 6. Priorities and Performance as a side-by-side diff. Removals on the left, additions on the right. Unchanged lines on both sides.
 7. Each changed line cites the engineers behind it. Clicking any line opens blame: the PRD, the `/chief` calls, and the sentiment count that produced the change, in order.
-8. Accept, request changes, or decline. Accept republishes the plan. The next `/chief` in Grok uses that plan.
+8. Accept, request changes, or decline. Accept writes the proposed lines into the goal of Chief Beef. The brief recompiles from that beef. The next `/chief` in Grok reads that goal. Request changes and Decline do not alter the beef.
 9. Request changes takes a comment. The comment goes to every engineer cited on that line, through Slack, and opens their next `/chief` reply.
 10. History. Every accepted version of the plan is kept with who accepted it and when, so the brief can show "this line has moved 3 times."
 
@@ -144,4 +144,4 @@ Live warehouse numbers inside the brief. Any engineer outside this batch of five
 
 ## CEO context pipeline
 
-Chief Beef is where the inflow lands: Helen's mailbox and calendar, Slack chats, git merges, and the `/chief` calls, each kept with the person, the time, and the OKR window it touches. Agents: read `docs/data-ingestion.md`. Snapshots will live under `data/`. The morning job reads Chief Beef, writes `briefs/pending.md`, and must start from the last review in `briefs/REVIEW.md`. It never Accepts. `/chief` still reads Current OKRs above until a Brief Accept republishes them.
+Data pipelines update Chief Beef all the time. The context inflow is Helen's mailbox and calendar, Slack chats, git merges, and the `/chief` calls, each kept with the person, the time, and the OKR window it touches. Helen's pipeline is `python3 scripts/run_morning.py`: it writes context to `beef/inflow.jsonl` and never edits `beef/goals.md`. The compiler then reads Beef and writes `briefs/pending.md`. Agents: `docs/data-ingestion.md`. It starts from the last review in `briefs/REVIEW.md`. It never changes the goal. Only an Accept from the CEO or the CPO does that. `/chief` reads `beef/goals.md`. Until Accept, that file is still the seed from Current OKRs.

@@ -4,3 +4,8 @@
 *.pem
 secrets/
 .edit-key
+
+node_modules
+dist
+__pycache__/
+*.pyc
