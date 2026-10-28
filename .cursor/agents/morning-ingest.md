@@ -9,4 +9,4 @@ python3 scripts/run_morning.py
 1. Pull Helen (`ingest_bio.py`).
 2. Rebuild signals.
 3. Write context to `beef/inflow.jsonl` and refresh the context half of `beef/CHIEF_BEEF.md`. Do **not** edit `beef/goals.md`.
-4. Compile `briefs/pending.md` from Beef. Do not Accept.
+4. Compile `briefs/pending.md` and `public/brief.json` from Beef. Do not Accept. The app reads `brief.json`.
