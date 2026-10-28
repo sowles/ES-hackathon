@@ -23,9 +23,12 @@ Refresh snapshots:
 ```
 python3 scripts/ingest_bio.py
 python3 scripts/extract_signals.py
+python3 scripts/verify_ingest.py
 ```
 
-These two scripts are the ingestion contract. They do not edit `plan.md` or `briefs/pending.md`.
+`verify_ingest.py` checks the snapshot against live bio MCP (unique ids, known records, one calendar week, sent folder, one inbox window). Future `cron-event-*` rows may have empty summaries; that is the source, not a paging bug.
+
+These scripts are the ingestion contract. They do not edit `plan.md` or `briefs/pending.md`.
 
 ## Source: bio MCP (no Slack)
 
