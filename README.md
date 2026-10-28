@@ -17,8 +17,9 @@ If AtScale shows a sign-in card, use the username and password above.
 
 ## Product and data (read these)
 
-- [plan.md](plan.md) — `/chief` and `/brief` (George). Published OKRs live here.
-- [docs/data-ingestion.md](docs/data-ingestion.md) — how agents pull Helen’s email/calendar, where snapshots live, and how the morning job respects Brief reviews.
+- [plan.md](plan.md) — Chief, **Chief Beef**, and Chief Brief. Published OKRs live here.
+- [beef/CHIEF_BEEF.md](beef/CHIEF_BEEF.md) — context + goal. Pipelines update context; Accept updates `beef/goals.md`. Brief compiles from Beef.
+- [docs/data-ingestion.md](docs/data-ingestion.md) — Helen pull, paging, Beef coupling.
 - [docs/helen-okr-pack-h2-2026.md](docs/helen-okr-pack-h2-2026.md) — inferred Helen OKRs from her files (Andy).
 
 ## Links

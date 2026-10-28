@@ -1,0 +1,208 @@
+#!/usr/bin/env python3
+"""Turn data/raw JSONL into data/derived/signals.md.
+
+Does not write briefs/pending.md or plan.md.
+"""
+
+from __future__ import annotations
+
+import argparse
+import json
+import re
+from collections import defaultdict
+from pathlib import Path
+
+TAGS = (
+    ("CB-101/TSA", re.compile(r"\b(CB-101|lexabamab|TSA|tech transfer|batch record)\b", re.I)),
+    ("CB-201/Harbor", re.compile(r"\b(CB-201|rivastide|Harbor)\b", re.I)),
+    ("CB-214", re.compile(r"\b(CB-214|pre-IND|alpha-synuclein)\b", re.I)),
+    ("CB-230", re.compile(r"\bCB-230\b", re.I)),
+    ("cash/runway", re.compile(r"\b(runway|earn-out|milestone|cash|budget|royalty)\b", re.I)),
+    ("board", re.compile(r"\b(board|Robert Chen|October pack)\b", re.I)),
+    ("people", re.compile(r"\b(hiring|layoff|retention|headcount|holding statement)\b", re.I)),
+)
+
+NATE_TITLE = re.compile(r"schedule review with nate", re.I)
+SECTION = re.compile(
+    r"(Decisions|Action items|Follow-ups)\s*\n(.*?)(?=(?:\n(?:Decisions|Action items|Follow-ups)\s*\n)|\Z)",
+    re.S | re.I,
+)
+
+
+def load_jsonl(path: Path) -> list[dict]:
+    if not path.exists():
+        return []
+    rows = []
+    with path.open(encoding="utf-8") as f:
+        for line in f:
+            line = line.strip()
+            if line:
+                rows.append(json.loads(line))
+    return rows
+
+
+def tags_for(text: str) -> list[str]:
+    found = [name for name, rx in TAGS if rx.search(text or "")]
+    return found or ["untagged"]
+
+
+def parse_summary(summary: str) -> dict[str, list[str]]:
+    out = {"decisions": [], "action_items": [], "follow_ups": []}
+    if not summary:
+        return out
+    for heading, body in SECTION.findall(summary):
+        key = heading.lower().replace(" ", "_")
+        items = [ln.strip(" -•\t") for ln in body.strip().splitlines() if ln.strip()]
+        out[key] = items
+    return out
+
+
+def mail_rank(mail: dict) -> int:
+    mid = mail.get("id") or ""
+    folder = mail.get("folder") or ""
+    if folder == "sent" or (mail.get("from") or {}).get("email", "").startswith(
+        "helen.williamson"
+    ):
+        return 1
+    if mid.startswith("cron-"):
+        return 5
+    return 3
+
+
+def blob(obj: dict) -> str:
+    bits = [
+        obj.get("title") or "",
+        obj.get("subject") or "",
+        obj.get("summary") or "",
+        obj.get("body") or "",
+        obj.get("notes") or "",
+    ]
+    return "\n".join(bits)
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "--root",
+        type=Path,
+        default=Path(__file__).resolve().parent.parent,
+    )
+    args = parser.parse_args()
+    root: Path = args.root
+    events = load_jsonl(root / "data" / "raw" / "events.jsonl")
+    emails = load_jsonl(root / "data" / "raw" / "emails.jsonl")
+
+    locked: dict[str, list[str]] = defaultdict(list)
+    open_items: dict[str, list[str]] = defaultdict(list)
+    actions: list[str] = []
+    sent_highlights: list[str] = []
+    themes: dict[str, int] = defaultdict(int)
+
+    for event in events:
+        if NATE_TITLE.search(event.get("title") or ""):
+            continue
+        parsed = parse_summary(event.get("summary") or "")
+        tag_list = tags_for(blob(event))
+        for t in tag_list:
+            themes[t] += 1
+        eid = event.get("id")
+        title = event.get("title")
+        when = event.get("date") or ""
+        for decision in parsed["decisions"]:
+            line = f"- {when} `{eid}` **{title}**: {decision} _(tags: {', '.join(tag_list)})_"
+            locked[tag_list[0]].append(line)
+        if not parsed["decisions"]:
+            follow = parsed["follow_ups"][:2]
+            if follow:
+                open_items[tag_list[0]].append(
+                    f"- {when} `{eid}` **{title}**: " + "; ".join(follow)
+                )
+        for item in parsed["action_items"][:3]:
+            actions.append(f"- {when} `{eid}` **{title}**: {item}")
+
+    for mail in emails:
+        rank = mail_rank(mail)
+        tag_list = tags_for(blob(mail))
+        for t in tag_list:
+            themes[t] += 1
+        mid = mail.get("id")
+        subj = mail.get("subject")
+        when = (mail.get("sent_at") or "")[:10]
+        frm = (mail.get("from") or {}).get("name") or ""
+        if rank == 1:
+            sent_highlights.append(
+                f"- {when} `{mid}` Helen → {', '.join(p.get('name','') for p in mail.get('to') or [])}: **{subj}** _(tags: {', '.join(tag_list)})_"
+            )
+            body = (mail.get("body") or "").replace("\n", " ").strip()
+            if body:
+                open_items[tag_list[0]].append(
+                    f"- {when} `{mid}` sent **{subj}**: {body[:280]}"
+                )
+        elif rank == 5:
+            continue
+        else:
+            open_items[tag_list[0]].append(
+                f"- {when} `{mid}` {frm}: **{subj}** _(tags: {', '.join(tag_list)})_"
+            )
+
+    lines = [
+        "# Signals from Helen’s files",
+        "",
+        "Generated by `scripts/extract_signals.py`. Cite these ids from `/chief` and `/brief`.",
+        "This file is **not** the published plan. Published OKRs live in `plan.md`.",
+        "",
+        f"- Events: **{len(events)}**",
+        f"- Emails: **{len(emails)}**",
+        "",
+        "## Theme counts",
+        "",
+    ]
+    for name, n in sorted(themes.items(), key=lambda kv: (-kv[1], kv[0])):
+        lines.append(f"- {name}: {n}")
+    lines += ["", "## Helen sent (highest signal)", ""]
+    lines.extend(sent_highlights[:40] or ["- _none_"])
+    lines += ["", "## Locked decisions (from meeting summaries)", ""]
+    if locked:
+        for tag, items in sorted(locked.items()):
+            lines.append(f"### {tag}")
+            lines.append("")
+            lines.extend(items[:25])
+            if len(items) > 25:
+                lines.append(f"- _+{len(items) - 25} more_")
+            lines.append("")
+    else:
+        lines.append("_none_")
+        lines.append("")
+    lines += ["## Open threads", ""]
+    if open_items:
+        for tag, items in sorted(open_items.items()):
+            lines.append(f"### {tag}")
+            lines.append("")
+            lines.extend(items[:20])
+            if len(items) > 20:
+                lines.append(f"- _+{len(items) - 20} more_")
+            lines.append("")
+    else:
+        lines.append("_none_")
+        lines.append("")
+    lines += ["## Action items (sample)", ""]
+    lines.extend(actions[:60] or ["- _none_"])
+    lines += [
+        "",
+        "## 2027–2029 themes (from evidence, not invented numbers)",
+        "",
+        "- Platform vs two clinical assets (CB-201 / CB-214) plus CB-230 keep-or-partner.",
+        "- GSK TSA must close 31 Dec 2026 so the earn-out is not leftover ops.",
+        "- Harbor slot is the CB-201 constraint; miss it and phase 1 slips.",
+        "- January 2027 board wants a decision slide, not a GSK recap.",
+        "",
+    ]
+    out = root / "data" / "derived" / "signals.md"
+    out.parent.mkdir(parents=True, exist_ok=True)
+    out.write_text("\n".join(lines).rstrip() + "\n", encoding="utf-8")
+    print(f"wrote {out}")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
