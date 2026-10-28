@@ -1,11 +1,13 @@
-# Morning ingest (data only)
+# Morning ingest → Chief Brief payload
 
-Weekdays 08:00 America/New_York. You own **snapshots**, not `/chief` or Chief Brief UI.
+Weekdays 08:00 America/New_York.
 
-1. From repo root: `python3 scripts/ingest_bio.py`
-2. Then: `python3 scripts/extract_signals.py`
-3. Do **not** edit `plan.md` Current OKRs.
-4. Do **not** Accept a brief. Do **not** overwrite `briefs/pending.md` unless the brief owner’s `draft_brief.py` exists and you are explicitly running it — other agents own that file.
-5. Leave `data/raw/` and `data/derived/signals.md` as the contract for `/chief` and `/brief`.
+`/chief` scores PRDs against **Current OKRs in plan.md** until Accept. This job refreshes **`briefs/pending.md`**, the Chief Brief page payload. It never Accepts and never edits those OKRs.
 
-Read [docs/data-ingestion.md](../../docs/data-ingestion.md) for paging, rank order, and how Brief reviews apply once `draft_brief.py` lands.
+```
+python3 scripts/run_morning.py
+```
+
+Ingest Helen → signals → rewrite `briefs/pending.md` from the last `briefs/REVIEW.md` action.
+
+If the latest review is Accept, `plan.md` must already show the accepted lines; if it does not, stop and report the mismatch.

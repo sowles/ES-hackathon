@@ -2,33 +2,32 @@
 
 How we pull CEO context for `/chief` and `/brief`. Product contract is [plan.md](../plan.md). Helen-shaped OKRs (exercise) are [helen-okr-pack-h2-2026.md](helen-okr-pack-h2-2026.md).
 
-This pipeline does **not** replace `/chief`. It feeds evidence and a **pending Brief**. Only an Accept on Chief Brief republishes the plan.
+`/chief` is the user command. It scores a PRD against **Current OKRs in plan.md** until leadership Accepts a Brief (`unclassified` is allowed; never force a weak match). After Accept, the next `/chief` opens with "Plan changed since your last call."
+
+Morning ingest rewrites **`briefs/pending.md`**, the payload for the Chief Brief page (diff, decisions needed, blame from Helen ids). It never Accepts and never edits Current OKRs.
 
 ## Where to look
 
 | Path | What it is |
 | --- | --- |
 | `data/canon/background.md` | Company canon from `knowledge://continental-bio/background` |
-| `data/raw/events.jsonl` | Helen’s calendar, one event per line. Each row already has the meeting `summary` (Decisions / Action items / Follow-ups). |
+| `data/raw/events.jsonl` | Helen’s calendar, one event per line. Each row already has the meeting `summary`. |
 | `data/raw/emails.jsonl` | Mailbox snapshot (`inbox` + `sent`) |
-| `data/derived/signals.md` | Ranked open/locked decisions, 2026–27 commitments, 2027–29 themes, with evidence ids |
-| `briefs/pending.md` | Unreviewed Chief Brief (Priorities \| Performance diff) |
-| `briefs/REVIEW.md` | Append-only Accept / Request changes / Decline log. **Morning agent starts here.** |
+| `data/derived/signals.md` | Ranked decisions with evidence ids |
+| `briefs/pending.md` | Chief Brief payload. Morning ingest rewrites this. |
+| `briefs/REVIEW.md` | Accept / Request changes / Decline log. Morning job starts here. |
 | `briefs/declined.md` | Lines leadership declined; do not re-propose without new evidence |
-| `briefs/accepted/` | Archived briefs after Accept |
-| `plan.md` Current OKRs | Published plan. `/chief` reads this, not the pending brief |
+| `briefs/accepted/` | History of accepted plan versions (who / when) |
+| `plan.md` Current OKRs | **Published plan. `/chief` reads this.** |
 
-Refresh snapshots:
+Refresh:
 
 ```
-python3 scripts/ingest_bio.py
-python3 scripts/extract_signals.py
-python3 scripts/verify_ingest.py
+python3 scripts/run_morning.py          # ingest + signals + rewrite briefs/pending.md
+python3 scripts/verify_ingest.py        # snapshot vs live MCP
 ```
 
-`verify_ingest.py` checks the snapshot against live bio MCP (unique ids, known records, one calendar week, sent folder, one inbox window). Future `cron-event-*` rows may have empty summaries; that is the source, not a paging bug.
-
-These scripts are the ingestion contract. They do not edit `plan.md` or `briefs/pending.md`.
+`verify_ingest.py` checks unique ids, known records, a calendar week, sent mail, and an inbox window. Future `cron-event-*` rows may have empty summaries; that is the source, not a paging bug.
 
 ## Source: bio MCP (no Slack)
 
@@ -65,34 +64,26 @@ Cloud / morning jobs must call HTTP JSON-RPC. Do not assume a local Cursor MCP s
 
 Tags: `CB-101/TSA`, `CB-201/Harbor`, `CB-214`, `CB-230`, `cash/runway`, `board`, `people`.
 
-Do not invent AtScale / warehouse numbers here. George’s brief is out of scope for live warehouse data.
+Do not invent AtScale / warehouse numbers. Live warehouse numbers are out of scope for the brief (plan.md).
 
 ## Morning agent (weekdays 08:00 ET)
 
-Overnight staffer. Never Accepts.
+Overnight staffer. Never Accepts. Never posts Request-changes comments to Slack (Brief UI does that).
 
 1. Read latest `briefs/REVIEW.md` and published OKRs in `plan.md`. If the last action is Accept and `plan.md` does not match, **stop** and report the mismatch.
 2. Load `briefs/declined.md` and any request-changes comments.
 3. Re-ingest the **full** bio window (not a watermark).
 4. Rebuild `signals.md`.
-5. Write `briefs/pending.md` from the **reviewed** plan, not from yesterday’s unreviewed draft (unless still waiting on a review — then **append** overnight evidence, do not clobber the queue).
+5. Rewrite `briefs/pending.md` in the plan.md Brief shape: decisions needed, effort-by-OKR (seed until call log exists), merge conflicts from plan.md, Priorities \| Performance from Helen vs published OKRs, history pointer.
 
 | Last review | Tomorrow |
 | --- | --- |
-| Accept | Diff new evidence vs **published** `plan.md`. Do not reopen accepted lines unless new mail/calendar contradicts them. |
-| Request changes | Plan unchanged. Rebuild pending from old plan using the reviewer’s keep / drop / rewrite comments. Cite the comment on rewritten lines. |
+| Accept | Diff new Helen evidence vs **published** `plan.md`. Do not reopen accepted lines unless new mail/calendar contradicts them. Next `/chief` must be able to say the plan changed. |
+| Request changes | Plan unchanged. Rebuild pending from old plan using the reviewer’s comments. |
 | Decline | Plan unchanged. Do not re-propose declined lines unless a **new** email/event id appears after the decline. |
 
-`draft_brief.py` inputs, in order: `plan.md` → latest `REVIEW.md` → `declined.md` → `signals.md`. Output: `briefs/pending.md` only.
+`draft_brief.py` inputs: `plan.md` → latest `REVIEW.md` → `declined.md` → snapshot ids. Output: `briefs/pending.md` only.
 
-## `/chief` and `/brief`
+## Out of scope for ingest
 
-- `/chief` takes a PRD, scores it against **published** OKRs in `plan.md`, and stores the call. It does not mutate the plan.
-- `/brief` shows engineer calls plus the pending Priorities \| Performance diff. Accept republishes `plan.md` and appends `briefs/REVIEW.md`.
-- Until Accept, `/chief` still uses the old OKRs.
-
-George’s `plan.md` seed OKRs are still the Mission 2 lines (trial site, months of supply, runway). The first accepted Brief on the CoS route should replace that seed with Helen’s pack so `/chief` scores the right company.
-
-## Out of scope
-
-No Slack adapter, no database, no live MCP on every `/chief`, no writes back to Helen’s mailbox/calendar, no auto-accept.
+No Slack adapter, no `/chief` verdict engine (on / beside / conflict / unclassified), no Brief website, no database, no writes back to Helen’s mailbox, no auto-accept.

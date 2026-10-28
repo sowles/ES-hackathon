@@ -132,4 +132,4 @@ Live warehouse numbers inside the brief. Any engineer outside this batch of five
 
 ## CEO context pipeline
 
-Helen's mailbox and calendar are ingested for this loop. Agents: read `docs/data-ingestion.md`. Snapshots will live under `data/`. The morning job writes `briefs/pending.md` and must start from the last review in `briefs/REVIEW.md`. It never Accepts. `/chief` still reads Current OKRs above until a Brief Accept republishes them.
+Helen's mailbox and calendar are ingested for this loop. Agents: read `docs/data-ingestion.md`. Snapshots live under `data/`. The morning job (`python3 scripts/run_morning.py`) rewrites `briefs/pending.md` — the payload for Chief Brief — and must start from the last review in `briefs/REVIEW.md`. It never Accepts. `/chief` still reads Current OKRs above until a Brief Accept republishes them. After Accept, the next `/chief` opens with "Plan changed since your last call."
